@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="prefs_file">com.frost.woo_withemark.PREFERENCE_FILE_KEY</string>
+    <string name="key">ck_c0b135d7b2208ecd09d481132f8cee102fcca0b1</string>
+    <string name="customer">cs_0adddd43c0ffbedf24bb46dfd672b6d06c07779c</string>
+
+</resources>

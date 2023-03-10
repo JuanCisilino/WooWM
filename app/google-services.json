@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "144738881116",
+    "project_id": "woowm-1d336",
+    "storage_bucket": "woowm-1d336.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144738881116:android:1cdbc6982943e66906e099",
+        "android_client_info": {
+          "package_name": "com.frost.woo_withemark"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144738881116-67m09u9f209le2vd939b08rqba2vnahq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.frost.woo_withemark",
+            "certificate_hash": "5f0a74278385eb4f08dc6ca5000eb66edb91d89c"
+          }
+        },
+        {
+          "client_id": "144738881116-t288pv8mvkpbgma60qi9gc1ffgcn16qd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANBqWl094ekANUtSRPRsgHGUkjJDKlO_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144738881116-t288pv8mvkpbgma60qi9gc1ffgcn16qd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
