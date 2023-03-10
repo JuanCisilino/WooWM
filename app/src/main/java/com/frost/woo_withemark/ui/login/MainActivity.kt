@@ -47,9 +47,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveAndContinue(user: User) {
-        viewModel.saveInDatabase(user)
         savePref(user)
         loadingDialog.dismiss()
+        if (!viewModel.existingUser) viewModel.saveInDatabase(user)
+        else viewModel.user?.let { savePref(it) }
         HomeActivity.start(this)
         finish()
     }
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                         .addOnCompleteListener {
                             if (it.isSuccessful){
                                 val user = User().convert(it.result.user!!)
+                                user.email?.let { viewModel.checkUser(it) }
                                 saveAndContinue(user)
                             }else {
                                 showAlert()

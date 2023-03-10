@@ -3,11 +3,14 @@ package com.frost.woo_withemark.extensions
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.os.Environment
 import android.widget.Toast
 import com.frost.woo_withemark.R
 import com.frost.woo_withemark.models.User
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import java.io.File
+import java.io.IOException
 
 
 fun Activity.signInWithCredential(credential: AuthCredential) =
@@ -41,6 +44,11 @@ fun Activity.getEmailPref(): String?{
     return prefs.getString(R.string.email.toString(), null)
 }
 
+fun Activity.isAdmin(): Boolean {
+    val prefs = getPref()
+    return prefs.getString(R.string.rol.toString(), null) == "admin"
+}
+
 fun Activity.clearPrefs(){
     val prefs = getPref()
     prefs?.edit()?.clear()?.apply()
@@ -48,4 +56,16 @@ fun Activity.clearPrefs(){
 
 fun showToast(context: Context, message: String){
     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+}
+
+@Throws(IOException::class)
+fun Activity.createImageFile(name: String): File {
+    // Create an image file name
+    val timeStamp: String = name
+    val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    return File.createTempFile(
+        timeStamp, /* prefix */
+        ".jpg", /* suffix */
+        storageDir /* directory */
+    )
 }

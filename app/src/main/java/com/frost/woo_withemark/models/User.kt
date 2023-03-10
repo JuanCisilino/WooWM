@@ -13,7 +13,7 @@ data class User(
     fun convert(user: FirebaseUser): User{
         this.email = user.email.toString()
         this.nombre = user.displayName.toString()
-        this.rol = "User"
+        this.rol = "admin"
         this.photo = user.photoUrl.toString()
         return this
     }

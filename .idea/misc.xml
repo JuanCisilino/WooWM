@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/drawable/bg_rounded_white.xml" value="0.1065" />
+        <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/layout/activity_add_edit.xml" value="0.1796875" />
         <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/layout/activity_detail.xml" value="0.1796875" />
         <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/layout/activity_home.xml" value="0.1796875" />
         <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/layout/activity_main.xml" value="0.1796875" />
         <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/layout/dialog_loading.xml" value="0.1796875" />
         <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/layout/item.xml" value="0.1796875" />
+        <entry key="..\:/Users/User/Desktop/Woo_Withemark/app/src/main/res/xml/file_paths.xml" value="0.1796875" />
       </map>
     </option>
   </component>

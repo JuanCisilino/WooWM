@@ -2,6 +2,7 @@ package com.frost.woo_withemark.ui.utils
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,10 +11,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.frost.woo_withemark.databinding.ItemBinding
 import com.frost.woo_withemark.models.WooProduct
 
-class ItemAdapter(private val postlist: List<WooProduct>, private val context: Context)
-    : RecyclerView.Adapter<ItemAdapter.ViewHolder>(){
+class ItemAdapter(
+    private val postlist: List<WooProduct>,
+    private val context: Context,
+    private val isAdmin:Boolean) : RecyclerView.Adapter<ItemAdapter.ViewHolder>(){
 
     var onProductClickCallback : ((product: WooProduct) -> Unit)? = null
+    var onProductEditClickCallback : ((product: WooProduct) -> Unit)? = null
     inner class ViewHolder(val binding: ItemBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemAdapter.ViewHolder {
@@ -27,10 +31,15 @@ class ItemAdapter(private val postlist: List<WooProduct>, private val context: C
     override fun onBindViewHolder(holder: ItemAdapter.ViewHolder, position: Int) {
         with(holder){
             with(postlist[position]) {
-                binding.nameTextView.text = name
-                binding.priceText.text = "$ $price"
+                val product = this
+                if (isAdmin) binding.floatingEdit.visibility = View.VISIBLE
                 if (images.isNotEmpty()) glideIt(images[0].src, binding.image)
-                binding.cardLayout.setOnClickListener { onProductClickCallback?.invoke(this) }
+                with(binding){
+                    nameTextView.text = name
+                    priceText.text = "$ $price"
+                    cardLayout.setOnClickListener { onProductClickCallback?.invoke(product) }
+                    floatingEdit.setOnClickListener { onProductEditClickCallback?.invoke(product) }
+                }
             }
         }
     }

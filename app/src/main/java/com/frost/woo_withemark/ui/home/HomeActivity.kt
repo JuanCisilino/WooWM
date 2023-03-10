@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,9 +12,11 @@ import com.frost.woo_withemark.R
 import com.frost.woo_withemark.databinding.ActivityHomeBinding
 import com.frost.woo_withemark.databinding.ActivityMainBinding
 import com.frost.woo_withemark.extensions.clearPrefs
+import com.frost.woo_withemark.extensions.isAdmin
 import com.frost.woo_withemark.extensions.showToast
 import com.frost.woo_withemark.extensions.signOut
 import com.frost.woo_withemark.models.WooProduct
+import com.frost.woo_withemark.ui.addedit.AddEditActivity
 import com.frost.woo_withemark.ui.detail.DetailActivity
 import com.frost.woo_withemark.ui.login.MainActivity
 import com.frost.woo_withemark.ui.utils.ItemAdapter
@@ -37,9 +40,19 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setComponents()
+        subscribeToLiveData()
+    }
+
+    private fun setComponents(){
         loadingDialog.show(supportFragmentManager)
         viewModel.getProducts(getString(R.string.key), getString(R.string.customer))
-        subscribeToLiveData()
+        checkAndSet()
+    }
+
+    private fun checkAndSet() {
+        if (isAdmin()) binding.floatingAdd.visibility = View.VISIBLE
+        binding.floatingAdd.setOnClickListener { AddEditActivity.start(this, 0) }
     }
 
     private fun subscribeToLiveData() {
@@ -54,12 +67,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setAdapter(productList: List<WooProduct>) {
-        val adapter = ItemAdapter(productList, this@HomeActivity)
+        val adapter = ItemAdapter(productList, this@HomeActivity, isAdmin())
         with(binding){
             postListrecyclerView.layoutManager = GridLayoutManager(this@HomeActivity, 2)
             postListrecyclerView.adapter = adapter
         }
         adapter.onProductClickCallback = { DetailActivity.start(this, it.id!!) }
+        adapter.onProductEditClickCallback = { AddEditActivity.start(this, it.id!!) }
     }
 
     override fun onBackPressed() {

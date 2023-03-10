@@ -7,7 +7,7 @@ data class WooProduct(
     val price: String?=null,
     val regular_price: String,
     var images: List<Images> = listOf(),
-    val stock_quantity: Int?
+    val stock_quantity: Int?=0
 ){}
 
 data class Images(
