@@ -22,4 +22,14 @@ class HomeViewModel @Inject constructor(private val wooRepository: WooRepository
                 {productListLiveData.postValue(null)}
             )
     }
+
+    fun deleteProduct(id: Int, secretCustomer: String, secretKey: String){
+        wooRepository.deleteProduct(id, secretCustomer, secretKey)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(
+                { getProducts(secretCustomer, secretKey) },
+                { productListLiveData.postValue(null) }
+            )
+    }
 }

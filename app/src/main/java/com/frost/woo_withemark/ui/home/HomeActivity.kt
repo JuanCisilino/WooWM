@@ -74,6 +74,10 @@ class HomeActivity : AppCompatActivity() {
         }
         adapter.onProductClickCallback = { DetailActivity.start(this, it.id!!) }
         adapter.onProductEditClickCallback = { AddEditActivity.start(this, it.id!!) }
+        adapter.onProductDeleteClickCallback = {
+            loadingDialog.show(supportFragmentManager)
+            viewModel.deleteProduct(it.id!!, getString(R.string.key), getString(R.string.customer))
+        }
     }
 
     override fun onBackPressed() {

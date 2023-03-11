@@ -2,13 +2,11 @@ package com.frost.woo_withemark.ui.addedit
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
@@ -16,11 +14,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.frost.woo_withemark.R
 import com.frost.woo_withemark.databinding.ActivityAddEditBinding
-import com.frost.woo_withemark.databinding.ActivityMainBinding
 import com.frost.woo_withemark.extensions.createImageFile
 import com.frost.woo_withemark.extensions.showToast
+import com.frost.woo_withemark.models.Images
 import com.frost.woo_withemark.models.WooProduct
-import com.frost.woo_withemark.ui.detail.DetailActivity
 import com.frost.woo_withemark.ui.utils.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType
@@ -67,10 +64,30 @@ class AddEditActivity : AppCompatActivity() {
     private fun subscribeToLiveData() {
         viewModel.productLiveData.observe(this) { handleProduct(it) }
         viewModel.saveProductLiveData.observe(this) { handleSavedProduct(it) }
+        viewModel.imageProductLiveData.observe(this) { handleImageProduct(it) }
+    }
+
+    private fun handleImageProduct(image: Unit?) {
+        image
+            ?.let { finish() }
+            ?:run {
+                loadingDialog.dismiss()
+                showToast(this, getString(R.string.error_image)) }
     }
 
     private fun handleSavedProduct(product: WooProduct?) {
-        product?.let { finish() } ?:run { showToast(this, getString(R.string.error_saved)) }
+        product
+            ?.let { finish() }
+            ?:run {
+                loadingDialog.dismiss()
+                showToast(this, getString(R.string.error_saved)) }
+    }
+
+    private fun saveImage(product: WooProduct) {
+        val file = viewModel.path?.let { File(it) }
+        val imageRequestBody = RequestBody.create(MediaType.parse("image/*"), file)
+        val part = MultipartBody.Part.createFormData("image", file!!.name , imageRequestBody)
+        viewModel.saveImage(product.id!!, part, getString(R.string.key), getString(R.string.customer))
     }
 
     private fun handleProduct(wooProduct: WooProduct?) {
@@ -140,15 +157,10 @@ class AddEditActivity : AppCompatActivity() {
         val newProduct = WooProduct(
             name = binding.nameTextView.text.toString(),
             description = binding.descriptionTextView.text.toString(),
-            regular_price = binding.priceText.text.toString()
+            regular_price = binding.priceText.text.toString(),
+            images = listOf(Images("https://www.digitalsport.com.ar/files/products/624b1bc16431e-565339-500x500.jpg"))
         )
-        viewModel.saveProduct(getPart(), newProduct, getString(R.string.key), getString(R.string.customer))
-    }
-
-    private fun getPart(): MultipartBody.Part {
-        val file = viewModel.path?.let { File(it) }
-        val imageRequestBody = RequestBody.create(MediaType.parse("image/*"), file)
-        return MultipartBody.Part.createFormData("image", file!!.name , imageRequestBody)
+        viewModel.saveProduct(newProduct, getString(R.string.key), getString(R.string.customer))
     }
 
     private fun checkEditProduct(product: WooProduct) {

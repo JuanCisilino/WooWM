@@ -11,6 +11,12 @@ class WooRepository(private val api: WooApi) {
     fun getProductById(id: Int, secretCustomer: String, secretKey: String) =
         api.getProductsByID(id, secretCustomer, secretKey)
 
-    fun saveProduct(image: MultipartBody.Part, product: WooProduct, secretCustomer: String, secretKey: String) =
-        api.saveProduct(image, product, secretCustomer, secretKey)
+    fun saveProduct(product: WooProduct, secretCustomer: String, secretKey: String) =
+        api.saveProduct(product, secretCustomer, secretKey)
+
+    fun saveImage(id: Int, image: MultipartBody.Part, secretCustomer: String, secretKey: String) =
+        api.uploadImage(id, image, secretCustomer, secretKey)
+
+    fun deleteProduct(id: Int, secretCustomer: String, secretKey: String) =
+        api.deleteProduct(id, secretCustomer, secretKey)
 }

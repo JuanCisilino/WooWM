@@ -18,6 +18,8 @@ class ItemAdapter(
 
     var onProductClickCallback : ((product: WooProduct) -> Unit)? = null
     var onProductEditClickCallback : ((product: WooProduct) -> Unit)? = null
+    var onProductDeleteClickCallback : ((product: WooProduct) -> Unit)? = null
+
     inner class ViewHolder(val binding: ItemBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemAdapter.ViewHolder {
@@ -32,13 +34,17 @@ class ItemAdapter(
         with(holder){
             with(postlist[position]) {
                 val product = this
-                if (isAdmin) binding.floatingEdit.visibility = View.VISIBLE
+                if (isAdmin) {
+                    binding.floatingEdit.visibility = View.VISIBLE
+                    binding.floatingDelete.visibility = View.VISIBLE
+                }
                 if (images.isNotEmpty()) glideIt(images[0].src, binding.image)
                 with(binding){
                     nameTextView.text = name
                     priceText.text = "$ $price"
                     cardLayout.setOnClickListener { onProductClickCallback?.invoke(product) }
                     floatingEdit.setOnClickListener { onProductEditClickCallback?.invoke(product) }
+                    floatingDelete.setOnClickListener { onProductDeleteClickCallback?.invoke(product) }
                 }
             }
         }

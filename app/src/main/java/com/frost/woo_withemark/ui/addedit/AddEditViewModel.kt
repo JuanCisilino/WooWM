@@ -14,6 +14,7 @@ class AddEditViewModel @Inject constructor(private val wooRepository: WooReposit
 
     var productLiveData = MutableLiveData<WooProduct?>()
     var saveProductLiveData = MutableLiveData<WooProduct?>()
+    var imageProductLiveData = MutableLiveData<Unit?>()
 
     var path : String?=null
 
@@ -27,13 +28,23 @@ class AddEditViewModel @Inject constructor(private val wooRepository: WooReposit
             )
     }
 
-    fun saveProduct(image: MultipartBody.Part, product: WooProduct, secretCustomer: String, secretKey: String){
-        wooRepository.saveProduct(image, product, secretCustomer, secretKey)
+    fun saveProduct(product: WooProduct, secretCustomer: String, secretKey: String){
+        wooRepository.saveProduct(product, secretCustomer, secretKey)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe(
-                {saveProductLiveData.postValue(it)},
-                {saveProductLiveData.postValue(null)}
+                { saveProductLiveData.postValue(it) },
+                { saveProductLiveData.postValue(null) }
+            )
+    }
+
+    fun saveImage(id: Int, image: MultipartBody.Part, secretCustomer: String, secretKey: String){
+        wooRepository.saveImage(id, image, secretCustomer, secretKey)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe(
+                { imageProductLiveData.postValue(Unit) },
+                { imageProductLiveData.postValue(null) }
             )
     }
 

@@ -1,5 +1,6 @@
 package com.frost.woo_withemark.network
 
+import com.frost.woo_withemark.models.Images
 import com.frost.woo_withemark.models.WooProduct
 import okhttp3.MultipartBody
 import retrofit2.http.*
@@ -25,12 +26,19 @@ interface WooApi {
                       @Query("consumer_key") consumerKey: String,
                       @Query("consumer_secret") consumerSecret: String): Observable<WooProduct>
 
-    @Multipart
     @POST("products")
-    fun saveProduct(@Part imagen: MultipartBody.Part,
-                    @Part product: WooProduct,
+    fun saveProduct(@Body product: WooProduct,
                     @Query("consumer_key") consumerKey: String,
                     @Query("consumer_secret") consumerSecret: String): Observable<WooProduct>
+
+    @Multipart
+    @POST("products/{id}/images")
+    fun uploadImage(
+        @Path("id") productId: Int,
+        @Part image: MultipartBody.Part?,
+        @Query("consumer_key") consumerKey: String,
+        @Query("consumer_secret") consumerSecret: String
+    ): Observable<Images>
 
     @DELETE("products/{id}")
     fun deleteProduct(@Path("id") id: Int,
