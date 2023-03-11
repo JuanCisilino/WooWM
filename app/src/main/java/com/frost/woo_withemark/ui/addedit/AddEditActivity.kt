@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -64,15 +65,15 @@ class AddEditActivity : AppCompatActivity() {
     private fun subscribeToLiveData() {
         viewModel.productLiveData.observe(this) { handleProduct(it) }
         viewModel.saveProductLiveData.observe(this) { handleSavedProduct(it) }
-        viewModel.imageProductLiveData.observe(this) { handleImageProduct(it) }
+        viewModel.updatedProductLiveData.observe(this) { handleUpdateProduct(it) }
     }
 
-    private fun handleImageProduct(image: Unit?) {
-        image
+    private fun handleUpdateProduct(product: Unit?) {
+        product
             ?.let { finish() }
             ?:run {
                 loadingDialog.dismiss()
-                showToast(this, getString(R.string.error_image)) }
+                showToast(this, getString(R.string.error_update)) }
     }
 
     private fun handleSavedProduct(product: WooProduct?) {
@@ -164,7 +165,20 @@ class AddEditActivity : AppCompatActivity() {
     }
 
     private fun checkEditProduct(product: WooProduct) {
+        loadingDialog.show(supportFragmentManager)
+        val image = product.images
+        val modifiedProduct = WooProduct(
+            id = product.id,
+            name = getBinding(binding.nameTextView),
+            description = getBinding(binding.descriptionTextView),
+            regular_price = getBinding(binding.priceText)
+        )
+        if (!image.isNullOrEmpty()) modifiedProduct.images = image.toList()
+        viewModel.updateProduct(modifiedProduct, getString(R.string.key), getString(R.string.customer))
+    }
 
+    private fun getBinding(hint: AppCompatEditText): String{
+        return if (hint.text.isNullOrBlank()) hint.hint.toString() else hint.text.toString()
     }
 
     private fun dispatchTakePictureIntent() {

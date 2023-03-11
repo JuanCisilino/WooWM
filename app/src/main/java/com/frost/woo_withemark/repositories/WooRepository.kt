@@ -19,4 +19,7 @@ class WooRepository(private val api: WooApi) {
 
     fun deleteProduct(id: Int, secretCustomer: String, secretKey: String) =
         api.deleteProduct(id, secretCustomer, secretKey)
+
+    fun updateProduct(product: WooProduct, secretCustomer: String, secretKey: String) =
+        api.updateProduct(product.id!!, product, secretCustomer, secretKey)
 }

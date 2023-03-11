@@ -7,6 +7,7 @@
     <string name="error_message">Se ha producido un error autenticando al usuario</string>
     <string name="error_saved">Error guardando el producto</string>
     <string name="error_image">Error guardando la imagen</string>
+    <string name="error_update">Error actualizando el producto</string>
     <string name="error_data">Error cargando la lista</string>
     <string name="error_prod">Error cargando el producto</string>
     <string name="error">Error</string>
