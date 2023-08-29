@@ -3,6 +3,7 @@ package com.frost.woo_withemark.extensions
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
 import com.frost.woo_withemark.R

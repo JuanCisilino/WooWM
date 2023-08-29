@@ -2,6 +2,7 @@ package com.frost.woo_withemark.ui.addedit
 
 import android.app.Activity
 import android.content.Intent
+import android.media.Image
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -39,8 +40,9 @@ class AddEditActivity : AppCompatActivity() {
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let { imageUri ->
+            viewModel.path = imageUri.path
             glideUri(imageUri)
-            viewModel.path = imageUri.path }
+        }
     }
 
 
@@ -66,6 +68,15 @@ class AddEditActivity : AppCompatActivity() {
         viewModel.productLiveData.observe(this) { handleProduct(it) }
         viewModel.saveProductLiveData.observe(this) { handleSavedProduct(it) }
         viewModel.updatedProductLiveData.observe(this) { handleUpdateProduct(it) }
+        viewModel.imageProductLiveData.observe(this) { handleSavedImage(it) }
+    }
+
+    private fun handleSavedImage(url: String?) {
+        url?.let { createAndSave(url) }
+           ?:run {
+               loadingDialog.dismiss()
+               showToast(this, getString(R.string.error_saved))
+           }
     }
 
     private fun handleUpdateProduct(product: Unit?) {
@@ -84,11 +95,9 @@ class AddEditActivity : AppCompatActivity() {
                 showToast(this, getString(R.string.error_saved)) }
     }
 
-    private fun saveImage(product: WooProduct) {
-        val file = viewModel.path?.let { File(it) }
-        val imageRequestBody = RequestBody.create(MediaType.parse("image/*"), file)
-        val part = MultipartBody.Part.createFormData("image", file!!.name , imageRequestBody)
-        viewModel.saveImage(product.id!!, part, getString(R.string.key), getString(R.string.customer))
+    private fun saveImage() {
+        viewModel.path?.let { viewModel.saveImage(this) }
+            ?:run { showToast(this, getString(R.string.error_saved)) }
     }
 
     private fun handleProduct(wooProduct: WooProduct?) {
@@ -149,17 +158,17 @@ class AddEditActivity : AppCompatActivity() {
             binding.nameTextView.text.isNullOrBlank() -> binding.nameTextView.hint = getString(R.string.insert_text)
             binding.descriptionTextView.text.isNullOrBlank() -> binding.descriptionTextView.hint = getString(R.string.insert_text)
             binding.priceText.text.isNullOrBlank() -> binding.priceText.hint = getString(R.string.insert_precio)
-            else -> createAndSave()
+            else -> saveImage()
         }
     }
 
-    private fun createAndSave() {
+    private fun createAndSave(url: String) {
         loadingDialog.show(supportFragmentManager)
         val newProduct = WooProduct(
             name = binding.nameTextView.text.toString(),
             description = binding.descriptionTextView.text.toString(),
             regular_price = binding.priceText.text.toString(),
-            images = listOf(Images("https://www.digitalsport.com.ar/files/products/624b1bc16431e-565339-500x500.jpg"))
+            images = listOf(Images(url))
         )
         viewModel.saveProduct(newProduct, getString(R.string.key), getString(R.string.customer))
     }

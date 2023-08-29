@@ -29,7 +29,7 @@
             android:layout_width="350dp"
             android:layout_height="400dp"
             android:layout_gravity="center"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -58,6 +58,23 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:hint="Descripcion del Producto"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="5dp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/urlPaymentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Url de pago"
             android:textSize="16sp"
             android:textStyle="bold" />
 

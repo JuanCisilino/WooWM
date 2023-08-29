@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
@@ -58,6 +59,29 @@ class DetailActivity : AppCompatActivity() {
             binding.priceText.text = "$ ${wooProduct.price}"
             binding.idText.text = "ID: ${wooProduct.id.toString()}"
             if (wooProduct.images.isNotEmpty()) glideIt(wooProduct.images[0].src)
+            binding.cartImage.setOnClickListener { openWebView() }
+        }
+    }
+
+    private fun openWebView() {
+        binding.webView.loadUrl("https://mpago.la/314wCgt")
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (binding.prodLayout.visibility == View.GONE) showProdLayout()
+    }
+
+    private fun showProdLayout(){
+        with(binding){
+            prodLayout.visibility = View.VISIBLE
+            webViewLayout.visibility = View.GONE
+        }
+    }
+    private fun showWebViewLayout(){
+        with(binding){
+            prodLayout.visibility = View.GONE
+            webViewLayout.visibility = View.VISIBLE
         }
     }
 
